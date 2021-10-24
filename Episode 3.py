@@ -5,7 +5,6 @@ ejudge = pd.read_html("results_ejudge.html")[0]
 excel = pd.read_excel("students_info.xlsx")
 
 data = pd.merge(excel, ejudge, how="left", right_on="User", left_on="login")
-print(data)
 GF_ave = [data[data["group_faculty"] == i]['Solved'].mean() for i in data["group_faculty"].unique()]
 GO_ave = [data[data["group_out"] == i]['Solved'].mean() for i in data["group_out"].unique()]
 
@@ -29,3 +28,7 @@ for i in range(len(data["group_faculty"][(data["G"] > 0) | (data['H'] > 0)])):
 print(" ")
 for gr_info in data["group_out"][(data["G"] > 0) | (data['H'] > 0)]:
     print(gr_info, end=" ")
+
+bool_checker = pd.notnull(data["login"])
+data = data[bool_checker].fillna(0) # corrected data
+print(data)
